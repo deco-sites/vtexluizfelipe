@@ -49,15 +49,16 @@ import * as $$$$$$39 from "./sections/Product/ImageGalleryFrontBack.tsx";
 import * as $$$$$$40 from "./sections/Product/ImageGallerySlider.tsx";
 import * as $$$$$$41 from "./sections/Product/NotFound.tsx";
 import * as $$$$$$42 from "./sections/Product/NotFoundChallenge.tsx";
-import * as $$$$$$43 from "./sections/Product/ProductInfo.tsx";
-import * as $$$$$$44 from "./sections/Product/ProductShelf.tsx";
-import * as $$$$$$45 from "./sections/Product/ProductShelfTabbed.tsx";
-import * as $$$$$$46 from "./sections/Product/SearchResult.tsx";
-import * as $$$$$$47 from "./sections/Product/ShelfWithImage.tsx";
-import * as $$$$$$48 from "./sections/Product/Wishlist.tsx";
-import * as $$$$$$49 from "./sections/Social/InstagramPosts.tsx";
-import * as $$$$$$50 from "./sections/Social/WhatsApp.tsx";
-import * as $$$$$$51 from "./sections/Theme/Theme.tsx";
+import * as $$$$$$43 from "./sections/Product/ProductBuyTogether.tsx";
+import * as $$$$$$44 from "./sections/Product/ProductInfo.tsx";
+import * as $$$$$$45 from "./sections/Product/ProductShelf.tsx";
+import * as $$$$$$46 from "./sections/Product/ProductShelfTabbed.tsx";
+import * as $$$$$$47 from "./sections/Product/SearchResult.tsx";
+import * as $$$$$$48 from "./sections/Product/ShelfWithImage.tsx";
+import * as $$$$$$49 from "./sections/Product/Wishlist.tsx";
+import * as $$$$$$50 from "./sections/Social/InstagramPosts.tsx";
+import * as $$$$$$51 from "./sections/Social/WhatsApp.tsx";
+import * as $$$$$$52 from "./sections/Theme/Theme.tsx";
 
 const manifest = {
   "loaders": {
@@ -102,24 +103,31 @@ const manifest = {
     "deco-sites/vtexluizfelipe/sections/Layout/GridItem.tsx": $$$$$$32,
     "deco-sites/vtexluizfelipe/sections/Links/LinkTree.tsx": $$$$$$33,
     "deco-sites/vtexluizfelipe/sections/Links/Shortcuts.tsx": $$$$$$34,
-    "deco-sites/vtexluizfelipe/sections/Miscellaneous/CampaignTimer.tsx": $$$$$$35,
-    "deco-sites/vtexluizfelipe/sections/Miscellaneous/CookieConsent.tsx": $$$$$$36,
+    "deco-sites/vtexluizfelipe/sections/Miscellaneous/CampaignTimer.tsx":
+      $$$$$$35,
+    "deco-sites/vtexluizfelipe/sections/Miscellaneous/CookieConsent.tsx":
+      $$$$$$36,
     "deco-sites/vtexluizfelipe/sections/Miscellaneous/Slide.tsx": $$$$$$37,
     "deco-sites/vtexluizfelipe/sections/Newsletter/Newsletter.tsx": $$$$$$38,
     "deco-sites/vtexluizfelipe/sections/Product/ImageGalleryFrontBack.tsx":
       $$$$$$39,
-    "deco-sites/vtexluizfelipe/sections/Product/ImageGallerySlider.tsx": $$$$$$40,
+    "deco-sites/vtexluizfelipe/sections/Product/ImageGallerySlider.tsx":
+      $$$$$$40,
     "deco-sites/vtexluizfelipe/sections/Product/NotFound.tsx": $$$$$$41,
-    "deco-sites/vtexluizfelipe/sections/Product/NotFoundChallenge.tsx": $$$$$$42,
-    "deco-sites/vtexluizfelipe/sections/Product/ProductInfo.tsx": $$$$$$43,
-    "deco-sites/vtexluizfelipe/sections/Product/ProductShelf.tsx": $$$$$$44,
-    "deco-sites/vtexluizfelipe/sections/Product/ProductShelfTabbed.tsx": $$$$$$45,
-    "deco-sites/vtexluizfelipe/sections/Product/SearchResult.tsx": $$$$$$46,
-    "deco-sites/vtexluizfelipe/sections/Product/ShelfWithImage.tsx": $$$$$$47,
-    "deco-sites/vtexluizfelipe/sections/Product/Wishlist.tsx": $$$$$$48,
-    "deco-sites/vtexluizfelipe/sections/Social/InstagramPosts.tsx": $$$$$$49,
-    "deco-sites/vtexluizfelipe/sections/Social/WhatsApp.tsx": $$$$$$50,
-    "deco-sites/vtexluizfelipe/sections/Theme/Theme.tsx": $$$$$$51,
+    "deco-sites/vtexluizfelipe/sections/Product/NotFoundChallenge.tsx":
+      $$$$$$42,
+    "deco-sites/vtexluizfelipe/sections/Product/ProductBuyTogether.tsx":
+      $$$$$$43,
+    "deco-sites/vtexluizfelipe/sections/Product/ProductInfo.tsx": $$$$$$44,
+    "deco-sites/vtexluizfelipe/sections/Product/ProductShelf.tsx": $$$$$$45,
+    "deco-sites/vtexluizfelipe/sections/Product/ProductShelfTabbed.tsx":
+      $$$$$$46,
+    "deco-sites/vtexluizfelipe/sections/Product/SearchResult.tsx": $$$$$$47,
+    "deco-sites/vtexluizfelipe/sections/Product/ShelfWithImage.tsx": $$$$$$48,
+    "deco-sites/vtexluizfelipe/sections/Product/Wishlist.tsx": $$$$$$49,
+    "deco-sites/vtexluizfelipe/sections/Social/InstagramPosts.tsx": $$$$$$50,
+    "deco-sites/vtexluizfelipe/sections/Social/WhatsApp.tsx": $$$$$$51,
+    "deco-sites/vtexluizfelipe/sections/Theme/Theme.tsx": $$$$$$52,
   },
   "apps": {
     "deco-sites/vtexluizfelipe/apps/decohub.ts": $$$$$$$$$$$0,
