@@ -6,7 +6,7 @@ import { color as vnda } from "apps/vnda/mod.ts";
 import vtexApp, { color as vtex } from "apps/vtex/mod.ts";
 import { color as wake } from "apps/wake/mod.ts";
 import { Section } from "deco/blocks/section.ts";
-import { AppContext as AC, App } from "deco/mod.ts";
+import { App, AppContext as AC } from "deco/mod.ts";
 import { rgb24 } from "std/fmt/colors.ts";
 import manifest, { Manifest } from "../manifest.gen.ts";
 
@@ -63,7 +63,8 @@ export default function Site(
   if (firstRun) {
     firstRun = false;
     console.info(
-      ` 🐁 ${rgb24("Storefront", color("deco"))} | ${rgb24(_platform, color(_platform))
+      ` 🐁 ${rgb24("Storefront", color("deco"))} | ${
+        rgb24(_platform, color(_platform))
       } \n`,
     );
   }

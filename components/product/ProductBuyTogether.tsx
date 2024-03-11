@@ -27,7 +27,7 @@ export async function loader(props: Props, _req: Request, _ctx: AppContext) {
 
   const { product } = props.page;
 
-  console.log()
+  console.log();
   const { offers } = product;
 
   const { teasers }: any = useOffer(offers);
@@ -54,11 +54,11 @@ export async function loader(props: Props, _req: Request, _ctx: AppContext) {
 
   const response = await invoke.vtex.loaders.intelligentSearch.productList({
     props: {
-      ids: updatedProductIds
-    }
+      ids: updatedProductIds,
+    },
   }) ?? [];
 
-  console.log("RESPONSE", response)
+  console.log("RESPONSE", response);
 
   const validProductIds = new Set(updatedProductIds);
 
