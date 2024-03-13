@@ -33,6 +33,7 @@ export async function loader(
   _req: Request,
   ctx: AppContext,
 ): Promise<LoaderResponse> {
+
   if (props.page === null) {
     throw new Error("Missing Product Details Page Info");
   }
@@ -42,16 +43,12 @@ export async function loader(
   const productTerm =
     nodeTerms.find((term) => product?.name?.toLowerCase().includes(term)) ?? "";
 
-  console.log(productTerm);
-
   const response = await ctx.invoke.vtex.loaders.intelligentSearch.productList({
     props: {
       query: productTerm,
       count: 3,
     },
   });
-
-  console.log(response);
 
   const productMap: Record<string, ProductListType> = {};
 
@@ -66,7 +63,6 @@ export async function loader(
       seller: product?.offers?.offers?.[0]?.seller ?? "1",
     };
 
-    console.log(productMap);
   });
 
   const productList = Object.values(productMap);
@@ -78,9 +74,7 @@ export async function loader(
   };
 }
 
-function BuyTogether({ page, products, term }: SectionProps<typeof loader>) {
-  console.log(page);
-  console.log(term);
+function BuyTogether({ products }: SectionProps<typeof loader>) {
 
   if (products === null) {
     throw new Error("Missing Product Details Page Info");
