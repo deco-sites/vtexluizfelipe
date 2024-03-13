@@ -4,6 +4,16 @@ import AddToCartBuyTogether from "deco-sites/vtexluizfelipe/components/ui/AddToC
 import { invoke } from "deco-sites/vtexluizfelipe/runtime.ts";
 import { formatPrice } from "deco-sites/vtexluizfelipe/sdk/format.ts";
 import { useOffer } from "deco-sites/vtexluizfelipe/sdk/useOffer.ts";
+import { SectionProps } from "deco/mod.ts";
+
+type LoaderResponse = {
+  page: Product[] | null;
+  products: ProductListType[];
+}
+
+export type TermsProps = {
+  terms: string;
+}
 
 export type ProductListType = {
   id: string;
@@ -13,97 +23,81 @@ export type ProductListType = {
   seller: string | undefined;
 };
 
-interface BuyTogetherProps {
+interface Props {
   page: ProductDetailsPage | null;
-  productList?: ProductListType[];
+  terms: TermsProps;
 }
 
-export type Props = BuyTogetherProps;
-
-export async function loader(props: Props, _req: Request, _ctx: AppContext) {
+export async function loader(props: Props, _req: Request, _ctx: AppContext): Promise<LoaderResponse> {
   if (props.page === null) {
     throw new Error("Missing Product Details Page Info");
   }
-
   const { product } = props.page;
+  const { terms } = props.terms;
+  const nodeTerms = terms.split(',');
+  const productTerm = nodeTerms.find((term) => product?.name?.toLowerCase().includes(term)) ?? '';
+  console.log(productTerm);
+  // product.name.includes(terms)
 
-  console.log();
-  const { offers } = product;
+  console.log(product);
+  // const { offers } = product;
 
-  const { teasers }: any = useOffer(offers);
+  // const { teasers }: any = useOffer(offers);
 
-  const getSkuIds = (name: string) => {
-    return teasers?.find((teaser: any) =>
-      teaser.conditions?.parameters?.some((param: any) => param.name === name)
-    )?.conditions?.parameters?.find((param: any) => param.name === name)
-      ?.value;
-  };
-
-  const skuIdsList1 = getSkuIds("SkuIdsList1");
-  const skuIdsList2 = getSkuIds("SkuIdsList2");
-
-  const skuIdsList2Array = skuIdsList2 ? skuIdsList2.split(",") : [];
-
-  const updatedProductIds: string[] = [skuIdsList1, ...skuIdsList2Array].filter(
-    Boolean,
-  ) as string[];
-
-  console.log("Updated Product IDs:", updatedProductIds);
-
-  if (!updatedProductIds.length) return null;
+  // const updatedProductIds = ['60639']
 
   const response = await invoke.vtex.loaders.intelligentSearch.productList({
     props: {
-      ids: updatedProductIds,
-    },
-  }) ?? [];
-
-  console.log("RESPONSE", response);
-
-  const validProductIds = new Set(updatedProductIds);
+      query: productTerm,
+      count: 3
+    }
+  })
 
   const productMap: Record<string, ProductListType> = {};
 
   response?.forEach((product: Product) => {
     const productId = product.productID;
 
-    if (validProductIds.has(productId)) {
       productMap[productId] = {
         id: product.productID,
         name: product.name,
         price: product?.offers?.offers?.[0]?.price ?? null,
         image: product.image?.[0]?.url ?? null,
         seller: product?.offers?.offers?.[0]?.seller,
-      };
-
-      if (product.isVariantOf?.hasVariant) {
-        product.isVariantOf.hasVariant.forEach((variant) => {
-          const variantId = variant.productID;
-
-          if (validProductIds.has(variantId)) {
-            productMap[variantId] = {
-              id: product.productID,
-              name: variant.name,
-              price: variant?.offers?.offers?.[0]?.price ?? null,
-              image: variant.image?.[0]?.url ?? null,
-              seller: variant?.offers?.offers?.[0]?.seller,
-            };
-          }
-        });
       }
-    }
-  });
+    })
+  console.log(response);
 
-  const skuList = Object.values(productMap);
+  const products = Object.values(productMap);
+  console.log(products)
 
   return {
     page: response,
-    skuList,
+    products
   };
 }
 
-function BuyTogether({ productList }: Props) {
-  if (productList === null) {
+function BuyTogether({page, products}: SectionProps<typeof loader>) {
+
+  console.log(page)
+  console.log(products)
+//   const productList: ProductListType[] = [{
+//     id: '1',
+//     name: 'dino',
+//     image: 'teste',
+//     price: 199,
+//     seller: '1',
+//   },
+//   {
+//     id: '2',
+//     name: 'dino',
+//     image: 'teste',
+//     price: 199,
+//     seller: '1',
+//   }
+// ];
+
+  if (products === null) {
     throw new Error("Missing Product Details Page Info");
   }
 
@@ -116,7 +110,7 @@ function BuyTogether({ productList }: Props) {
         Compre junto
       </h2>
       <div class="flex flex-row">
-        {productList?.map((product: ProductListType) => (
+        {!!products && products?.map((product: ProductListType) => (
           <div
             class="h-[152px] w-96 bg-white py-7 px-6 mr-9 rounded-lg border-2 border-[#E4E4E4]"
             key={product.id}
@@ -138,7 +132,7 @@ function BuyTogether({ productList }: Props) {
             </div>
           </div>
         ))}
-        <AddToCartBuyTogether products={productList} />
+        <AddToCartBuyTogether products={products} />
       </div>
     </div>
   );

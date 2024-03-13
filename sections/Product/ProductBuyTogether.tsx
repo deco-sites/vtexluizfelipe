@@ -1,4 +1,4 @@
-export { default } from "deco-sites/vtexluizfelipe/components/product/ProductBuyTogether.tsx";
+export { default, loader } from "deco-sites/vtexluizfelipe/components/product/ProductBuyTogether.tsx";
 
 export function LoadingFallback() {
   return (
