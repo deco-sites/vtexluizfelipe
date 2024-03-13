@@ -3,6 +3,7 @@ import { color as linx } from "apps/linx/mod.ts";
 import { color as nuvemshop } from "apps/nuvemshop/mod.ts";
 import { color as shopify } from "apps/shopify/mod.ts";
 import { color as vnda } from "apps/vnda/mod.ts";
+import { Config } from "apps/vtex/loaders/config.ts";
 import vtexApp, { color as vtex } from "apps/vtex/mod.ts";
 import { color as wake } from "apps/wake/mod.ts";
 import { Section } from "deco/blocks/section.ts";
@@ -18,6 +19,7 @@ export type Props = {
    */
   platform: Platform;
   theme?: Section;
+  vtex?: Config;
 } & CommerceProps;
 
 export type Platform =
@@ -83,4 +85,6 @@ export default function Site(
 
 export { onBeforeResolveProps } from "apps/website/mod.ts";
 
-export type AppContext = AC<App & Pick<ReturnType<typeof vtexApp>, "manifest">>;
+export type AppContext = AC<
+  ReturnType<typeof Site> & Pick<ReturnType<typeof vtexApp>, "manifest">
+>;

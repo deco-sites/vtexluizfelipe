@@ -1,26 +1,26 @@
+import AddToCartBuyTogether from "$store/islands/AddToCartBuyTogether.tsx";
 import { Product, ProductDetailsPage } from "apps/commerce/types.ts";
 import { AppContext } from "deco-sites/vtexluizfelipe/apps/site.ts";
-import AddToCartBuyTogether from "deco-sites/vtexluizfelipe/components/ui/AddToCardButton.tsx";
-import { invoke } from "deco-sites/vtexluizfelipe/runtime.ts";
+
 import { formatPrice } from "deco-sites/vtexluizfelipe/sdk/format.ts";
-import { useOffer } from "deco-sites/vtexluizfelipe/sdk/useOffer.ts";
 import { SectionProps } from "deco/mod.ts";
 
 type LoaderResponse = {
-  page: Product[] | null;
+  page: Product | null;
   products: ProductListType[];
-}
+  term: string;
+};
 
 export type TermsProps = {
   terms: string;
-}
+};
 
 export type ProductListType = {
   id: string;
-  name: string | undefined;
-  image: string | null;
-  price: number | null;
-  seller: string | undefined;
+  name: string;
+  image: string;
+  price: number;
+  seller: string;
 };
 
 interface Props {
@@ -28,74 +28,59 @@ interface Props {
   terms: TermsProps;
 }
 
-export async function loader(props: Props, _req: Request, _ctx: AppContext): Promise<LoaderResponse> {
+export async function loader(
+  props: Props,
+  _req: Request,
+  ctx: AppContext,
+): Promise<LoaderResponse> {
   if (props.page === null) {
     throw new Error("Missing Product Details Page Info");
   }
   const { product } = props.page;
   const { terms } = props.terms;
-  const nodeTerms = terms.split(',');
-  const productTerm = nodeTerms.find((term) => product?.name?.toLowerCase().includes(term)) ?? '';
+  const nodeTerms = terms.split(",");
+  const productTerm =
+    nodeTerms.find((term) => product?.name?.toLowerCase().includes(term)) ?? "";
+
   console.log(productTerm);
-  // product.name.includes(terms)
 
-  console.log(product);
-  // const { offers } = product;
-
-  // const { teasers }: any = useOffer(offers);
-
-  // const updatedProductIds = ['60639']
-
-  const response = await invoke.vtex.loaders.intelligentSearch.productList({
+  const response = await ctx.invoke.vtex.loaders.intelligentSearch.productList({
     props: {
       query: productTerm,
-      count: 3
-    }
-  })
+      count: 3,
+    },
+  });
+
+  console.log(response);
 
   const productMap: Record<string, ProductListType> = {};
 
   response?.forEach((product: Product) => {
     const productId = product.productID;
 
-      productMap[productId] = {
-        id: product.productID,
-        name: product.name,
-        price: product?.offers?.offers?.[0]?.price ?? null,
-        image: product.image?.[0]?.url ?? null,
-        seller: product?.offers?.offers?.[0]?.seller,
-      }
-    })
-  console.log(response);
+    productMap[productId] = {
+      id: product?.productID,
+      name: product?.name ?? "",
+      price: product?.offers?.offers?.[0]?.price ?? 0,
+      image: product.image?.[0]?.url ?? "",
+      seller: product?.offers?.offers?.[0]?.seller ?? "1",
+    };
 
-  const products = Object.values(productMap);
-  console.log(products)
+    console.log(productMap);
+  });
+
+  const productList = Object.values(productMap);
 
   return {
-    page: response,
-    products
+    page: product,
+    products: productList,
+    term: productTerm,
   };
 }
 
-function BuyTogether({page, products}: SectionProps<typeof loader>) {
-
-  console.log(page)
-  console.log(products)
-//   const productList: ProductListType[] = [{
-//     id: '1',
-//     name: 'dino',
-//     image: 'teste',
-//     price: 199,
-//     seller: '1',
-//   },
-//   {
-//     id: '2',
-//     name: 'dino',
-//     image: 'teste',
-//     price: 199,
-//     seller: '1',
-//   }
-// ];
+function BuyTogether({ page, products, term }: SectionProps<typeof loader>) {
+  console.log(page);
+  console.log(term);
 
   if (products === null) {
     throw new Error("Missing Product Details Page Info");

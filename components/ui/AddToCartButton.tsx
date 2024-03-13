@@ -1,23 +1,22 @@
 import { useCart } from "apps/vtex/hooks/useCart.ts";
-import { ProductListType } from "../product/ProductBuyTogether.tsx";
+import { ProductListType } from "deco-sites/vtexluizfelipe/components/product/ProductBuyTogether.tsx";
 import Button from "./Button.tsx";
 
 export interface Props {
-  products: ProductListType[] | undefined;
+  products: ProductListType[];
 }
 
 function AddToCartBuyTogether({ products }: Props) {
+  if (!products) return null;
   const { addItems } = useCart();
 
-  const handleAddToCart = () => {
-    if (!products) return;
+  const handleAddToCart = (): void => {
     const orderItems = products.map((product) => ({
       id: product.id,
       seller: product.seller || "",
       quantity: 1,
     }));
 
-    console.log(orderItems);
     addItems({ orderItems });
   };
   return (
