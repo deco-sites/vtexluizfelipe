@@ -1,5 +1,5 @@
 import { useCart } from "apps/vtex/hooks/useCart.ts";
-import { ProductListType } from "deco-sites/vtexluizfelipe/components/product/ProductBuyTogether.tsx";
+import { ProductListType } from "deco-sites/vtexluizfelipe/sdk/useProductList.ts";
 import Button from "./Button.tsx";
 
 export interface Props {

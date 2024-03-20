@@ -1,26 +1,19 @@
 import AddToCartBuyTogether from "$store/islands/AddToCartBuyTogether.tsx";
-import { Product, ProductDetailsPage } from "apps/commerce/types.ts";
+import { Product, ProductDetailsPage, PropertyValue } from "apps/commerce/types.ts";
 import { AppContext } from "deco-sites/vtexluizfelipe/apps/site.ts";
 
 import { formatPrice } from "deco-sites/vtexluizfelipe/sdk/format.ts";
+import { ProductListType, useProductList } from "deco-sites/vtexluizfelipe/sdk/useProductList.ts";
 import { SectionProps } from "deco/mod.ts";
+import { JSX } from "preact";
+import { useCallback, useState } from "preact/hooks";
 
 type LoaderResponse = {
-  page: Product | null;
   products: ProductListType[];
-  term: string;
 };
 
 export type TermsProps = {
   terms: string;
-};
-
-export type ProductListType = {
-  id: string;
-  name: string;
-  image: string;
-  price: number;
-  seller: string;
 };
 
 interface Props {
@@ -28,20 +21,17 @@ interface Props {
   terms: TermsProps;
 }
 
-export async function loader(
-  props: Props,
-  _req: Request,
-  ctx: AppContext,
-): Promise<LoaderResponse> {
+export async function loader(props: Props, _req: Request, ctx: AppContext): Promise<LoaderResponse> {
 
-  if (props.page === null) {
+  if (!props.page?.product) {
     throw new Error("Missing Product Details Page Info");
   }
   const { product } = props.page;
   const { terms } = props.terms;
-  const nodeTerms = terms.split(",");
+
+  const splitedTerms = terms.split(",");
   const productTerm =
-    nodeTerms.find((term) => product?.name?.toLowerCase().includes(term)) ?? "";
+    splitedTerms.find((term) => product?.name?.toLowerCase().includes(term)) ?? "";
 
   const response = await ctx.invoke.vtex.loaders.intelligentSearch.productList({
     props: {
@@ -57,10 +47,12 @@ export async function loader(
 
     productMap[productId] = {
       id: product?.productID,
+      inProductGroupWithID: product?.inProductGroupWithID ?? "",
       name: product?.name ?? "",
       price: product?.offers?.offers?.[0]?.price ?? 0,
       image: product.image?.[0]?.url ?? "",
       seller: product?.offers?.offers?.[0]?.seller ?? "1",
+      variants: product?.isVariantOf?.hasVariant ?? []
     };
 
   });
@@ -68,17 +60,33 @@ export async function loader(
   const productList = Object.values(productMap);
 
   return {
-    page: product,
     products: productList,
-    term: productTerm,
   };
 }
 
-function BuyTogether({ products }: SectionProps<typeof loader>) {
+function ProductBuyTogether({ products }: SectionProps<typeof loader>) {
+  const [productsVariant, setProductVariant] = useState<ProductListType[]>(products);
 
-  if (products === null) {
+  if (!products) {
     throw new Error("Missing Product Details Page Info");
   }
+
+  const totalPrice = products.reduce((accumulator, product) => accumulator + product.price, 0)
+
+  const handleClick = useCallback((event: JSX.TargetedMouseEvent<HTMLButtonElement>, product: Product) => {
+    event.preventDefault();
+
+    setProductVariant((prevState) => {
+      const filteredPrevState = prevState.filter(prev => prev.inProductGroupWithID !== product.inProductGroupWithID);
+
+      const { productMap } = useProductList(product);
+
+      return [
+        ...filteredPrevState,
+        productMap
+      ]
+    })
+  }, [])
 
   return (
     <div
@@ -89,18 +97,27 @@ function BuyTogether({ products }: SectionProps<typeof loader>) {
         Compre junto
       </h2>
       <div class="flex flex-row">
-        {!!products && products?.map((product: ProductListType) => (
+        {products?.map((product: ProductListType) => (
           <div
-            class="h-[152px] w-96 bg-white py-7 px-6 mr-9 rounded-lg border-2 border-[#E4E4E4]"
+            class="w-96 bg-white py-7 px-6 mr-9 rounded-lg"
             key={product.id}
           >
-            <div class="flex flex-row">
+            <div class="flex flex-col">
               <img
                 src={product.image ?? ""}
                 alt={product.name}
-                class="w-24 h-24 mr-6"
+                class="w-100% h-100% mr-6"
               />
               <div class="flex flex-col justify-center">
+                <div class="flex justify-center align-middle w-100% gap-3">
+                  {product.variants.map((variant: Product) => {
+                    const tamanhoProperty = variant.additionalProperty?.find((property: PropertyValue) => property?.name === "Tamanho"); null;
+                    const tamanhoValue = tamanhoProperty ? tamanhoProperty.value : null;
+                    const selectedSku = productsVariant.some((pvariant) => pvariant.name == variant.name);
+                    const blockClassSelected = selectedSku ? "bg-black" : "bg-red-500"
+                    return <button class={`mt-2 mb-2 w-10 rounded ${blockClassSelected}`} onClick={(event) => handleClick(event, variant)}>{tamanhoValue}</button>
+                  })}
+                </div>
                 <p class="text-sm font-bold text-[#56565A] max-w-[300px] mb-4">
                   {product.name}
                 </p>
@@ -111,10 +128,11 @@ function BuyTogether({ products }: SectionProps<typeof loader>) {
             </div>
           </div>
         ))}
-        <AddToCartBuyTogether products={products} />
+        <span>{formatPrice(totalPrice ?? 0)}</span>
+        <AddToCartBuyTogether products={productsVariant} />
       </div>
     </div>
   );
 }
 
-export default BuyTogether;
+export default ProductBuyTogether;

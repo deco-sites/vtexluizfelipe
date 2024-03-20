@@ -85,6 +85,4 @@ export default function Site(
 
 export { onBeforeResolveProps } from "apps/website/mod.ts";
 
-export type AppContext = AC<
-  ReturnType<typeof Site> & Pick<ReturnType<typeof vtexApp>, "manifest">
->;
+export type AppContext = AC<ReturnType<typeof Site> & Pick<ReturnType<typeof vtexApp>, "manifest">>;
