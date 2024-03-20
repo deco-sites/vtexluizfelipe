@@ -18,8 +18,8 @@ export const useProductList = (product: Product) => {
     price: product?.offers?.offers?.[0]?.price ?? 0,
     image: product.image?.[0]?.url ?? "",
     seller: product?.offers?.offers?.[0]?.seller ?? "1",
-    variants: product?.isVariantOf?.hasVariant ?? []
-  }
+    variants: product?.isVariantOf?.hasVariant ?? [],
+  };
 
   return { productMap };
-} 
+};

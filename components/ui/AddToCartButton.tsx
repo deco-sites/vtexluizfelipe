@@ -19,7 +19,7 @@ function AddToCartBuyTogether({ products }: Props) {
 
     addItems({ orderItems });
   };
-  "bg-amber-500 text-white"
+  "bg-amber-500 text-white";
   return (
     <Button
       onClick={handleAddToCart}
