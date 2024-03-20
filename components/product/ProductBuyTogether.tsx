@@ -71,7 +71,7 @@ function ProductBuyTogether({ products }: SectionProps<typeof loader>) {
     throw new Error("Missing Product Details Page Info");
   }
 
-  const totalPrice = products.reduce((accumulator, product) => accumulator + product.price, 0)
+  const totalPrice = productsVariant.reduce((accumulator, product) => accumulator + product.price, 0)
 
   const handleClick = useCallback((event: JSX.TargetedMouseEvent<HTMLButtonElement>, product: Product) => {
     event.preventDefault();
@@ -109,12 +109,12 @@ function ProductBuyTogether({ products }: SectionProps<typeof loader>) {
                 class="w-100% h-100% mr-6"
               />
               <div class="flex flex-col justify-center">
-                <div class="flex justify-center align-middle w-100% gap-3">
+                <div class="flex justify-center align-middle w-100% gap-2">
                   {product.variants.map((variant: Product) => {
                     const tamanhoProperty = variant.additionalProperty?.find((property: PropertyValue) => property?.name === "Tamanho"); null;
                     const tamanhoValue = tamanhoProperty ? tamanhoProperty.value : null;
                     const selectedSku = productsVariant.some((pvariant) => pvariant.name == variant.name);
-                    const blockClassSelected = selectedSku ? "bg-black" : "bg-red-500"
+                    const blockClassSelected = selectedSku ? "bg-[#f88417] text-white" : ""
                     return <button class={`mt-2 mb-2 w-10 rounded ${blockClassSelected}`} onClick={(event) => handleClick(event, variant)}>{tamanhoValue}</button>
                   })}
                 </div>

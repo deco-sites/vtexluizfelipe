@@ -19,10 +19,11 @@ function AddToCartBuyTogether({ products }: Props) {
 
     addItems({ orderItems });
   };
+  "bg-amber-500 text-white"
   return (
     <Button
       onClick={handleAddToCart}
-      class="text-white bg-[#27239E] border-[#27239E] hover:bg-[#6562E5] hover:border-[#6562E5] w-[74px] lg:w-[108px] h-9 min-h-fit rounded-lg"
+      class="text-white bg-[#f88417] border-[#f88417] hover:bg-[#c97f3a] hover:border-[#c97f3a] w-[74px] lg:w-[108px] h-9 min-h-fit rounded-lg"
     >
       Adicionar
     </Button>
