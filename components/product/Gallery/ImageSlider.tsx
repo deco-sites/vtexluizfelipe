@@ -31,34 +31,49 @@ export default function GallerySlider(props: Props) {
 
   const {
     page: { product: { image: images = [] } },
+    page: { product: { video = [] } },
     layout: { width, height },
   } = props;
+
+  const productVideoImages = [...video, ...images];
   const aspectRatio = `${width} / ${height}`;
 
   return (
     <div id={id} class="grid grid-flow-row sm:grid-flow-col">
-      {/* Image Slider */}
       <div class="relative order-1 sm:order-2">
         <Slider class="carousel carousel-center gap-6 w-screen sm:w-[40vw]">
-          {images.map((img, index) => (
-            <Slider.Item
-              index={index}
-              class="carousel-item w-full"
-            >
-              <Image
-                class="w-full"
-                sizes="(max-width: 640px) 100vw, 40vw"
-                style={{ aspectRatio }}
-                src={img.url!}
-                alt={img.alternateName}
-                width={width}
-                height={height}
-                // Preload LCP image for better web vitals
-                preload={index === 0}
-                loading={index === 0 ? "eager" : "lazy"}
-              />
-            </Slider.Item>
-          ))}
+          {productVideoImages.map((element, index) => {
+
+            if (element.contentUrl) {
+              return <Slider.Item
+                index={index}
+                class="carousel-item w-full"
+              >
+                <video width='w-100' height={720} src={element.contentUrl} autoPlay controls loading={"eager"} aspect-ratio={5 / 6.85} />
+              </Slider.Item>
+            }
+
+            if ('url' in element) {
+              return <Slider.Item
+                index={index}
+                class="carousel-item w-full"
+              >
+                <Image
+                  class="w-full"
+                  sizes="(max-width: 640px) 100vw, 40vw"
+                  style={{ aspectRatio }}
+                  src={element.url!}
+                  alt={element.alternateName}
+                  width={width}
+                  height={height}
+                  // Preload LCP image for better web vitals
+                  preload={index === 0}
+                  loading={index === 0 ? "eager" : "lazy"}
+                />
+              </Slider.Item>
+            }
+
+          })}
         </Slider>
 
         <Slider.PrevButton
@@ -86,20 +101,32 @@ export default function GallerySlider(props: Props) {
 
       {/* Dots */}
       <ul class="carousel carousel-center gap-1 px-4 sm:px-0 sm:flex-col order-2 sm:order-1">
-        {images.map((img, index) => (
-          <li class="carousel-item min-w-[63px] sm:min-w-[100px]">
-            <Slider.Dot index={index}>
-              <Image
-                style={{ aspectRatio }}
-                class="group-disabled:border-base-300 border rounded "
-                width={63}
-                height={87.5}
-                src={img.url!}
-                alt={img.alternateName}
-              />
-            </Slider.Dot>
-          </li>
-        ))}
+
+        {productVideoImages.map((element, index) => {
+          if (element.contentUrl) {
+            return <li>
+              <Slider.Dot index={index}>
+                <video width={61} height={71} src={element.contentUrl} />
+              </Slider.Dot>
+            </li>
+          }
+
+          if ('url' in element) {
+            return <li class="carousel-item min-w-[63px] sm:min-w-[100px]">
+              <Slider.Dot index={index}>
+                <Image
+                  style={{ aspectRatio }}
+                  class="group-disabled:border-base-300 border rounded "
+                  width={63}
+                  height={87.5}
+                  src={element.url!}
+                  alt={element.alternateName}
+                />
+              </Slider.Dot>
+            </li>
+          }
+
+        })}
       </ul>
 
       <SliderJS rootId={id} />

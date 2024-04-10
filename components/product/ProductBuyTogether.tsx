@@ -2,6 +2,7 @@ import AddToCartBuyTogether from "$store/islands/AddToCartBuyTogether.tsx";
 import { Product, ProductDetailsPage, PropertyValue } from "apps/commerce/types.ts";
 import { AppContext } from "deco-sites/vtexluizfelipe/apps/site.ts";
 
+import Image from "apps/website/components/Image.tsx";
 import { formatPrice } from "deco-sites/vtexluizfelipe/sdk/format.ts";
 import { ProductListType, useProductList } from "deco-sites/vtexluizfelipe/sdk/useProductList.ts";
 import { SectionProps } from "deco/mod.ts";
@@ -26,6 +27,8 @@ export async function loader(props: Props, _req: Request, ctx: AppContext): Prom
   if (!props.page?.product) {
     throw new Error("Missing Product Details Page Info");
   }
+
+  console.log(props.page)
   const { product } = props.page;
   const { terms } = props.terms;
 
@@ -52,7 +55,8 @@ export async function loader(props: Props, _req: Request, ctx: AppContext): Prom
       price: product?.offers?.offers?.[0]?.price ?? 0,
       image: product.image?.[0]?.url ?? "",
       seller: product?.offers?.offers?.[0]?.seller ?? "1",
-      variants: product?.isVariantOf?.hasVariant ?? []
+      variants: product?.isVariantOf?.hasVariant ?? [],
+      url: product?.url ?? ""
     };
 
   });
@@ -103,11 +107,14 @@ function ProductBuyTogether({ products }: SectionProps<typeof loader>) {
             key={product.id}
           >
             <div class="flex flex-col">
-              <img
-                src={product.image ?? ""}
-                alt={product.name}
-                class="w-100% h-100% mr-6"
-              />
+              <a href={product.url}>
+                <Image
+                  src={product.image ?? ""}
+                  alt={product.name}
+                  class="w-100% h-100% mr-6"
+                  width={1000}
+                />
+              </a>
               <div class="flex flex-col justify-center">
                 <div class="flex justify-center align-middle w-100% gap-2">
                   {product.variants.map((variant: Product) => {

@@ -8,6 +8,7 @@ export type ProductListType = {
   price: number;
   seller: string;
   variants: Product[];
+  url: string;
 };
 
 export const useProductList = (product: Product) => {
@@ -19,6 +20,7 @@ export const useProductList = (product: Product) => {
     image: product.image?.[0]?.url ?? "",
     seller: product?.offers?.offers?.[0]?.seller ?? "1",
     variants: product?.isVariantOf?.hasVariant ?? [],
+    url: product?.url ?? ""
   };
 
   return { productMap };
