@@ -1,10 +1,17 @@
 import AddToCartBuyTogether from "$store/islands/AddToCartBuyTogether.tsx";
-import { Product, ProductDetailsPage, PropertyValue } from "apps/commerce/types.ts";
+import {
+  Product,
+  ProductDetailsPage,
+  PropertyValue,
+} from "apps/commerce/types.ts";
 import { AppContext } from "deco-sites/vtexluizfelipe/apps/site.ts";
 
 import Image from "apps/website/components/Image.tsx";
 import { formatPrice } from "deco-sites/vtexluizfelipe/sdk/format.ts";
-import { ProductListType, useProductList } from "deco-sites/vtexluizfelipe/sdk/useProductList.ts";
+import {
+  ProductListType,
+  useProductList,
+} from "deco-sites/vtexluizfelipe/sdk/useProductList.ts";
 import { SectionProps } from "deco/mod.ts";
 import { JSX } from "preact";
 import { useCallback, useState } from "preact/hooks";
@@ -22,19 +29,23 @@ interface Props {
   terms: TermsProps;
 }
 
-export async function loader(props: Props, _req: Request, ctx: AppContext): Promise<LoaderResponse> {
-
+export async function loader(
+  props: Props,
+  _req: Request,
+  ctx: AppContext,
+): Promise<LoaderResponse> {
   if (!props.page?.product) {
     throw new Error("Missing Product Details Page Info");
   }
 
-  console.log(props.page)
+  console.log(props.page);
   const { product } = props.page;
   const { terms } = props.terms;
 
   const splitedTerms = terms.split(",");
   const productTerm =
-    splitedTerms.find((term) => product?.name?.toLowerCase().includes(term)) ?? "";
+    splitedTerms.find((term) => product?.name?.toLowerCase().includes(term)) ??
+      "";
 
   const response = await ctx.invoke.vtex.loaders.intelligentSearch.productList({
     props: {
@@ -56,9 +67,8 @@ export async function loader(props: Props, _req: Request, ctx: AppContext): Prom
       image: product.image?.[0]?.url ?? "",
       seller: product?.offers?.offers?.[0]?.seller ?? "1",
       variants: product?.isVariantOf?.hasVariant ?? [],
-      url: product?.url ?? ""
+      url: product?.url ?? "",
     };
-
   });
 
   const productList = Object.values(productMap);
@@ -69,28 +79,38 @@ export async function loader(props: Props, _req: Request, ctx: AppContext): Prom
 }
 
 function ProductBuyTogether({ products }: SectionProps<typeof loader>) {
-  const [productsVariant, setProductVariant] = useState<ProductListType[]>(products);
+  const [productsVariant, setProductVariant] = useState<ProductListType[]>(
+    products,
+  );
 
   if (!products) {
     throw new Error("Missing Product Details Page Info");
   }
 
-  const totalPrice = productsVariant.reduce((accumulator, product) => accumulator + product.price, 0)
+  const totalPrice = productsVariant.reduce(
+    (accumulator, product) => accumulator + product.price,
+    0,
+  );
 
-  const handleClick = useCallback((event: JSX.TargetedMouseEvent<HTMLButtonElement>, product: Product) => {
-    event.preventDefault();
+  const handleClick = useCallback(
+    (event: JSX.TargetedMouseEvent<HTMLButtonElement>, product: Product) => {
+      event.preventDefault();
 
-    setProductVariant((prevState) => {
-      const filteredPrevState = prevState.filter(prev => prev.inProductGroupWithID !== product.inProductGroupWithID);
+      setProductVariant((prevState) => {
+        const filteredPrevState = prevState.filter((prev) =>
+          prev.inProductGroupWithID !== product.inProductGroupWithID
+        );
 
-      const { productMap } = useProductList(product);
+        const { productMap } = useProductList(product);
 
-      return [
-        ...filteredPrevState,
-        productMap
-      ]
-    })
-  }, [])
+        return [
+          ...filteredPrevState,
+          productMap,
+        ];
+      });
+    },
+    [],
+  );
 
   return (
     <div
@@ -118,11 +138,27 @@ function ProductBuyTogether({ products }: SectionProps<typeof loader>) {
               <div class="flex flex-col justify-center">
                 <div class="flex justify-center align-middle w-100% gap-2">
                   {product.variants.map((variant: Product) => {
-                    const tamanhoProperty = variant.additionalProperty?.find((property: PropertyValue) => property?.name === "Tamanho"); null;
-                    const tamanhoValue = tamanhoProperty ? tamanhoProperty.value : null;
-                    const selectedSku = productsVariant.some((pvariant) => pvariant.name == variant.name);
-                    const blockClassSelected = selectedSku ? "bg-[#f88417] text-white" : ""
-                    return <button class={`mt-2 mb-2 w-10 rounded ${blockClassSelected}`} onClick={(event) => handleClick(event, variant)}>{tamanhoValue}</button>
+                    const tamanhoProperty = variant.additionalProperty?.find((
+                      property: PropertyValue,
+                    ) => property?.name === "Tamanho");
+                    null;
+                    const tamanhoValue = tamanhoProperty
+                      ? tamanhoProperty.value
+                      : null;
+                    const selectedSku = productsVariant.some((pvariant) =>
+                      pvariant.name == variant.name
+                    );
+                    const blockClassSelected = selectedSku
+                      ? "bg-[#f88417] text-white"
+                      : "";
+                    return (
+                      <button
+                        class={`mt-2 mb-2 w-10 rounded ${blockClassSelected}`}
+                        onClick={(event) => handleClick(event, variant)}
+                      >
+                        {tamanhoValue}
+                      </button>
+                    );
                   })}
                 </div>
                 <p class="text-sm font-bold text-[#56565A] max-w-[300px] mb-4">

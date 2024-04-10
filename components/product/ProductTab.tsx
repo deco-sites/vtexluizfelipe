@@ -8,7 +8,7 @@ function ProductTab({ activeIndex }: Props) {
   return (
     <div>
       <button
-        class={activeIndex === 0 ? 'bg-red-700' : ""}
+        class={activeIndex === 0 ? "bg-red-700" : ""}
         {...usePartialSection<typeof ProductTab>({
           props: { activeIndex: 0 },
         })}
@@ -16,7 +16,7 @@ function ProductTab({ activeIndex }: Props) {
         Aba 1
       </button>
       <button
-        class={activeIndex === 1 ? 'bg-blue-700' : ""}
+        class={activeIndex === 1 ? "bg-blue-700" : ""}
         {...usePartialSection<typeof ProductTab>({
           props: { activeIndex: 1 },
         })}
@@ -24,7 +24,7 @@ function ProductTab({ activeIndex }: Props) {
         Aba 2
       </button>
       <button
-        class={activeIndex === 2 ? 'bg-orange-600' : ""}
+        class={activeIndex === 2 ? "bg-orange-600" : ""}
         {...usePartialSection<typeof ProductTab>({
           props: { activeIndex: 2 },
         })}
@@ -33,6 +33,6 @@ function ProductTab({ activeIndex }: Props) {
       </button>
     </div>
   );
-};
+}
 
 export default ProductTab;

@@ -20,7 +20,7 @@ export const useProductList = (product: Product) => {
     image: product.image?.[0]?.url ?? "",
     seller: product?.offers?.offers?.[0]?.seller ?? "1",
     variants: product?.isVariantOf?.hasVariant ?? [],
-    url: product?.url ?? ""
+    url: product?.url ?? "",
   };
 
   return { productMap };
