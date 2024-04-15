@@ -1,8 +1,5 @@
 import type { OrderForm } from "apps/vtex/utils/types.ts";
-import {
-  default as extend,
-  Props,
-} from "apps/website/loaders/extension.ts";
+import { default as extend, Props } from "apps/website/loaders/extension.ts";
 
 /**
  * @title Extend your cart
