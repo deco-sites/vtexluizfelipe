@@ -4,7 +4,9 @@
 
 import * as $$$$$$$$$$$0 from "./apps/decohub.ts";
 import * as $$$$$$$$$$$1 from "./apps/site.ts";
+import * as $$$4 from "./loaders/extensions/orderForm.ts";
 import * as $$$2 from "./loaders/extensions/ProductDetailsVideo.ts";
+import * as $$$3 from "./loaders/extensions/ProductOrderForm.ts";
 import * as $$$0 from "./loaders/Layouts/ProductCard.tsx";
 import * as $$$1 from "./loaders/List/Sections.tsx";
 import * as $$$$$$0 from "./sections/Animation/Animation.tsx";
@@ -65,7 +67,9 @@ import * as $$$$$$54 from "./sections/Theme/Theme.tsx";
 
 const manifest = {
   "loaders": {
+    "deco-sites/vtexluizfelipe/loaders/extensions/orderForm.ts": $$$4,
     "deco-sites/vtexluizfelipe/loaders/extensions/ProductDetailsVideo.ts": $$$2,
+    "deco-sites/vtexluizfelipe/loaders/extensions/ProductOrderForm.ts": $$$3,
     "deco-sites/vtexluizfelipe/loaders/Layouts/ProductCard.tsx": $$$0,
     "deco-sites/vtexluizfelipe/loaders/List/Sections.tsx": $$$1,
   },

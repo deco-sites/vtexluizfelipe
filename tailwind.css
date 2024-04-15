@@ -39,6 +39,12 @@
     @apply border-l border-transparent duration-200 whitespace-pre-line text-center;
     @apply flex flex-col items-center justify-start gap-8 py-10 px-8 lg:px-12;
   }
+
+  .drawer-toggle:checked~.drawer-side>*:not(.drawer-overlay) {
+    transform: translateX(0%);
+    right: 0;
+    position: absolute;
+  }
 }
 
 .group:disabled .group-disabled\:animate-progress {
